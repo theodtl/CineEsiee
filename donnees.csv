@@ -1,0 +1,32 @@
+# Format :
+# ACTEUR;nom;prenom;jour;mois;annee;nationalite
+# REALISATEUR;nom;prenom;jour;mois;annee;nationalite
+# FILM;titre;annee;duree;genre;nom_realisateur;nom_acteur1;nom_acteur2;nom_acteur3
+# CINEMA;id;nom
+# ROUTE;id_depart;id_arrivee;distance
+
+ACTEUR;Pitt;Brad;18;12;1963;americaine
+ACTEUR;Norton;Edward;18;8;1969;americaine
+ACTEUR;Bonham Carter;Helena;26;5;1966;britannique
+ACTEUR;Freeman;Morgan;1;6;1937;americaine
+ACTEUR;Douglas;Michael;25;9;1944;americaine
+ACTEUR;Worthington;Sam;2;8;1976;australienne
+ACTEUR;Saldana;Zoe;19;6;1978;americaine
+
+REALISATEUR;Fincher;David;10;5;1962;americaine
+REALISATEUR;Cameron;James;16;8;1954;canadienne
+
+FILM;Fight Club;1999;135;DRAME;Fincher;Pitt;Norton;Bonham Carter
+FILM;Seven;1995;127;POLICIER;Fincher;Pitt;Freeman
+FILM;The Game;1997;129;DRAME;Fincher;Douglas
+FILM;Avatar;2009;162;SCIENCE_FICTION;Cameron;Worthington;Saldana
+
+CINEMA;1;ESIEE
+CINEMA;2;Noisy Centre
+CINEMA;3;Val d'Europe
+CINEMA;4;Paris Est
+
+ROUTE;1;2;5
+ROUTE;2;3;18
+ROUTE;1;4;25
+ROUTE;4;3;12

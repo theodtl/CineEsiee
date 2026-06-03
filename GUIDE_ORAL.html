@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide oral - CineEsiee</title>
+    <style>
+        :root {
+            --bg: #f5f7fb;
+            --panel: #ffffff;
+            --panel-soft: #f9fbfd;
+            --text: #1f2937;
+            --muted: #667085;
+            --line: #d9e0ea;
+            --accent: #0f766e;
+            --accent-dark: #115e59;
+            --accent-soft: #e7f5f2;
+            --warn-soft: #fff6df;
+            --code-bg: #111827;
+            --code-text: #f9fafb;
+            --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--text);
+            background: var(--bg);
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent-dark);
+        }
+
+        .topbar {
+            background: var(--panel);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .hero {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 30px 24px;
+        }
+
+        .hero h1 {
+            margin: 0 0 8px;
+            font-size: 36px;
+            line-height: 1.15;
+            color: var(--accent-dark);
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 940px;
+            color: var(--muted);
+            font-size: 17px;
+        }
+
+        .layout {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 290px minmax(0, 1fr);
+            gap: 24px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 16px;
+            align-self: start;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 16px;
+            max-height: calc(100vh - 32px);
+            overflow: auto;
+        }
+
+        .sidebar h2 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            color: var(--accent-dark);
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 7px 8px;
+            border-radius: 6px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover {
+            background: var(--accent-soft);
+            color: var(--accent-dark);
+        }
+
+        main {
+            min-width: 0;
+        }
+
+        section {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 22px;
+            scroll-margin-top: 18px;
+        }
+
+        h2 {
+            margin: 0 0 14px;
+            color: var(--accent-dark);
+            font-size: 25px;
+            line-height: 1.25;
+        }
+
+        h3 {
+            margin: 24px 0 8px;
+            font-size: 18px;
+            color: #263241;
+        }
+
+        h4 {
+            margin: 18px 0 6px;
+            font-size: 16px;
+            color: var(--accent-dark);
+        }
+
+        p {
+            margin: 0 0 12px;
+        }
+
+        ul,
+        ol {
+            margin-top: 8px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        code {
+            background: #edf2f7;
+            border: 1px solid #d8e0ea;
+            border-radius: 4px;
+            padding: 2px 5px;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 0.95em;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            border-radius: 8px;
+            padding: 15px;
+            overflow-x: auto;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 14px;
+            line-height: 1.45;
+        }
+
+        pre code {
+            background: transparent;
+            border: 0;
+            padding: 0;
+            color: inherit;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 15px;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--line);
+            padding: 10px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        th {
+            background: #eef3f7;
+            color: #263241;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--panel-soft);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .card h3 {
+            margin: 0 0 8px;
+            color: var(--accent-dark);
+        }
+
+        .note,
+        .warning,
+        .oral {
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin: 14px 0;
+            border-left: 5px solid var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .warning {
+            background: var(--warn-soft);
+            border-left-color: #d97706;
+        }
+
+        .oral {
+            background: #eef2ff;
+            border-left-color: #4f46e5;
+        }
+
+        .flow {
+            display: grid;
+            gap: 10px;
+            margin: 16px 0;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 44px minmax(0, 1fr);
+            gap: 12px;
+            align-items: start;
+            background: var(--panel-soft);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .step span {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            font-weight: bold;
+        }
+
+        details {
+            background: var(--panel-soft);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--accent-dark);
+        }
+
+        details p {
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        .diagram {
+            background: #0b1220;
+            color: #d1e7ff;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 14px;
+        }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .pill {
+            background: #eef3f7;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+
+        @media print {
+            .sidebar {
+                display: none;
+            }
+
+            .layout {
+                display: block;
+                padding: 0;
+            }
+
+            section {
+                box-shadow: none;
+                break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                max-height: none;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <header class="hero">
+            <h1>Guide oral - CineEsiee</h1>
+            <p>Page de revision complete pour expliquer le projet C : architecture, structures, listes chainees, CSV, filmographies, graphe de cinemas et Dijkstra.</p>
+        </header>
+    </div>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>Sommaire</h2>
+            <a href="#objectif">Objectif</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#relations">Relations entre fichiers</a>
+            <a href="#structures">Structures</a>
+            <a href="#csv">Chargement CSV</a>
+            <a href="#deroulement">Deroulement</a>
+            <a href="#main">Fonctions main.c</a>
+            <a href="#personne">Fonctions personne.c</a>
+            <a href="#film">Fonctions film.c</a>
+            <a href="#fichier">Fonctions fichier.c</a>
+            <a href="#cinema">Fonctions cinema.c</a>
+            <a href="#duplication">Non-duplication</a>
+            <a href="#listes">Listes chainees</a>
+            <a href="#headers">Fichiers .h / .c</a>
+            <a href="#questions">Questions possibles</a>
+            <a href="#resume">Resume oral</a>
+        </aside>
+
+        <main>
+            <section id="objectif">
+                <h2>1. Idee generale du projet</h2>
+                <p>Le programme simule une petite base de donnees cinematographique. Il gere des acteurs, des realisateurs, des films et un petit graphe de cinemas pour calculer un trajet optimal.</p>
+                <p>Les donnees ne sont pas codees en dur dans <code>main.c</code>. Elles sont lues au demarrage depuis <code>donnees.csv</code>, puis stockees en memoire dans des structures et des listes chainees.</p>
+                <div class="pill-row">
+                    <span class="pill">Structures</span>
+                    <span class="pill">Listes chainees</span>
+                    <span class="pill">Pointeurs</span>
+                    <span class="pill">CSV</span>
+                    <span class="pill">Dijkstra</span>
+                    <span class="pill">0 warning gcc</span>
+                </div>
+                <div class="oral">
+                    <strong>Phrase a sortir a l'oral :</strong> "CineEsiee est une base de donnees simulee en C. Les donnees viennent d'un CSV, puis le programme les relie en memoire avec des pointeurs pour eviter les duplications."
+                </div>
+            </section>
+
+            <section id="architecture">
+                <h2>2. Organisation des fichiers</h2>
+                <div class="cards">
+                    <div class="card">
+                        <h3>main.c</h3>
+                        <p>Contient la fonction <code>main</code>, le menu console, les saisies utilisateur et les appels vers les autres modules.</p>
+                    </div>
+                    <div class="card">
+                        <h3>personne.h / personne.c</h3>
+                        <p>Definit et manipule les types <code>Date</code>, <code>Personne</code>, <code>Acteur</code>, <code>Realisateur</code>, ainsi que les listes chainees de personnes.</p>
+                    </div>
+                    <div class="card">
+                        <h3>film.h / film.c</h3>
+                        <p>Definit les films, les genres, l'affichage, la recherche et les filmographies.</p>
+                    </div>
+                    <div class="card">
+                        <h3>cinema.h / cinema.c</h3>
+                        <p>Definit le graphe de cinemas, les routes entre cinemas et l'algorithme de Dijkstra.</p>
+                    </div>
+                    <div class="card">
+                        <h3>fichier.h / fichier.c</h3>
+                        <p>Charge les donnees depuis <code>donnees.csv</code> et construit les listes en memoire.</p>
+                    </div>
+                    <div class="card">
+                        <h3>donnees.csv</h3>
+                        <p>Contient toutes les donnees : acteurs, realisateurs, films, cinemas et routes.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="relations">
+                <h2>3. Relations entre les fichiers</h2>
+                <p><code>main.c</code> inclut les modules dont il a besoin :</p>
+                <pre><code>#include "cinema.h"
+#include "fichier.h"
+#include "film.h"
+#include "personne.h"</code></pre>
+
+                <p><code>film.h</code> inclut <code>personne.h</code>, car un film contient des pointeurs vers un <code>Realisateur</code> et des <code>Acteur</code>.</p>
+                <p><code>fichier.h</code> inclut <code>cinema.h</code>, <code>film.h</code> et <code>personne.h</code>, car le chargement CSV remplit toute la base.</p>
+                <p><code>cinema.h</code> est independant des films et des personnes : il gere uniquement le graphe.</p>
+
+                <div class="diagram">main.c
+  |-- fichier.h  -> charge donnees.csv
+  |-- film.h     -> films + filmographies
+  |-- personne.h -> acteurs + realisateurs
+  |-- cinema.h   -> graphe + Dijkstra
+
+film.h
+  |-- personne.h -> Film contient Acteur* et Realisateur*</div>
+            </section>
+
+            <section id="structures">
+                <h2>4. Structures principales</h2>
+
+                <h3>Date</h3>
+                <pre><code>typedef struct
+{
+    int jour;
+    int mois;
+    int annee;
+} Date;</code></pre>
+                <p>Elle sert a stocker une date de naissance.</p>
+
+                <h3>Personne</h3>
+                <pre><code>typedef struct
+{
+    char nom[TEXTE_COURT];
+    char prenom[TEXTE_COURT];
+    char nationalite[TEXTE_COURT];
+    Date naissance;
+} Personne;</code></pre>
+                <p><code>Personne</code> contient les informations communes aux acteurs et aux realisateurs : nom, prenom, date de naissance et nationalite.</p>
+
+                <h3>Acteur et Realisateur</h3>
+                <pre><code>typedef struct
+{
+    Personne infos;
+} Acteur;
+
+typedef struct
+{
+    Personne infos;
+} Realisateur;</code></pre>
+                <p>Ils sont deux types differents, mais ils reutilisent la structure <code>Personne</code>.</p>
+
+                <h3>Listes chainees d'acteurs et de realisateurs</h3>
+                <pre><code>typedef struct NoeudActeur
+{
+    Acteur acteur;
+    struct NoeudActeur *suivant;
+} NoeudActeur;
+
+typedef struct NoeudRealisateur
+{
+    Realisateur realisateur;
+    struct NoeudRealisateur *suivant;
+} NoeudRealisateur;</code></pre>
+                <p>Chaque noeud contient une donnee et un pointeur vers le noeud suivant. Cela permet d'avoir un nombre variable d'acteurs ou de realisateurs.</p>
+
+                <h3>Genre</h3>
+                <pre><code>typedef enum
+{
+    ACTION = 1,
+    HORREUR,
+    COMEDIE,
+    DOCUMENTAIRE,
+    POLICIER,
+    DRAME,
+    ANIMATION,
+    SCIENCE_FICTION
+} Genre;</code></pre>
+                <p>L'enum limite les genres aux valeurs prevues par le sujet.</p>
+
+                <h3>Film</h3>
+                <pre><code>typedef struct Film
+{
+    char titre[TITRE_MAX];
+    int annee;
+    int duree;
+    Genre genre;
+    Realisateur *realisateur;
+    Acteur *acteurs[NB_ACTEURS_MAX];
+    int nb_acteurs;
+    struct Film *suivant;
+} Film;</code></pre>
+                <p>Un film contient son titre, son annee, sa duree, son genre, un pointeur vers son realisateur, un tableau de pointeurs vers ses acteurs et un pointeur vers le film suivant.</p>
+                <div class="note">
+                    <strong>Point essentiel :</strong> le film ne copie pas les acteurs et le realisateur. Il garde seulement leurs adresses.
+                </div>
+
+                <h3>Cinema, Arete et GrapheCinema</h3>
+                <pre><code>typedef struct Arete
+{
+    Cinema *destination;
+    int distance;
+    struct Arete *suivant;
+} Arete;
+
+struct Cinema
+{
+    int id;
+    char nom[CINEMA_NOM_MAX];
+    Arete *voisins;
+    Cinema *suivant;
+};
+
+typedef struct
+{
+    Cinema *cinemas;
+} GrapheCinema;</code></pre>
+                <p>Le graphe contient une liste chainee de cinemas. Chaque cinema contient une liste chainee de routes vers ses voisins.</p>
+            </section>
+
+            <section id="csv">
+                <h2>5. Chargement depuis donnees.csv</h2>
+                <p>Le CSV contient plusieurs types de lignes. Le premier champ indique le type de donnee.</p>
+                <pre><code>ACTEUR;nom;prenom;jour;mois;annee;nationalite
+REALISATEUR;nom;prenom;jour;mois;annee;nationalite
+FILM;titre;annee;duree;genre;nom_realisateur;nom_acteur1;nom_acteur2;nom_acteur3
+CINEMA;id;nom
+ROUTE;id_depart;id_arrivee;distance</code></pre>
+
+                <div class="flow">
+                    <div class="step"><span>1</span><div><strong>Acteurs</strong><br>Ils sont charges en premier pour pouvoir etre references par les films.</div></div>
+                    <div class="step"><span>2</span><div><strong>Realisateurs</strong><br>Ils sont charges avant les films pour que chaque film pointe vers un realisateur existant.</div></div>
+                    <div class="step"><span>3</span><div><strong>Films</strong><br>Chaque film cherche son realisateur et ses acteurs par nom, puis stocke leurs pointeurs.</div></div>
+                    <div class="step"><span>4</span><div><strong>Cinemas</strong><br>Les sommets du graphe sont crees.</div></div>
+                    <div class="step"><span>5</span><div><strong>Routes</strong><br>Les routes relient des cinemas deja crees.</div></div>
+                </div>
+
+                <div class="warning">
+                    <strong>Limite du CSV :</strong> les champs ne doivent pas contenir le caractere <code>;</code>. Le format est volontairement simple pour rester defendable dans un TP C.
+                </div>
+            </section>
+
+            <section id="deroulement">
+                <h2>6. Deroulement du programme</h2>
+                <ol>
+                    <li><code>main</code> declare les listes : acteurs, realisateurs, films et graphe.</li>
+                    <li><code>initialiser_graphe(&amp;graphe)</code> met la liste de cinemas a <code>NULL</code>.</li>
+                    <li><code>charger_base("donnees.csv", ...)</code> charge toutes les donnees.</li>
+                    <li>Le programme entre dans une boucle <code>while (choix != 4)</code>.</li>
+                    <li><code>afficher_menu</code> affiche le menu.</li>
+                    <li><code>lire_choix</code> lit le choix utilisateur.</li>
+                    <li>Le <code>switch</code> execute la fonction correspondante.</li>
+                    <li>A la fin, le programme libere la memoire.</li>
+                </ol>
+                <pre><code>liberer_films(films);
+liberer_acteurs(acteurs);
+liberer_realisateurs(realisateurs);
+liberer_graphe(&amp;graphe);</code></pre>
+            </section>
+
+            <section id="main">
+                <h2>7. Fonctions de main.c</h2>
+                <table>
+                    <tr><th>Fonction</th><th>Role</th></tr>
+                    <tr><td><code>vider_fin_ligne</code></td><td>Supprime le <code>\n</code> laisse par <code>fgets</code>.</td></tr>
+                    <tr><td><code>lire_choix</code></td><td>Lit le choix du menu avec <code>fgets</code>, puis convertit avec <code>sscanf</code>.</td></tr>
+                    <tr><td><code>lire_entier</code></td><td>Lit un entier pour les ids de cinemas.</td></tr>
+                    <tr><td><code>pause_console</code></td><td>Attend que l'utilisateur appuie sur Entree.</td></tr>
+                    <tr><td><code>rechercher_film_menu</code></td><td>Demande un titre, appelle <code>chercher_film</code>, puis affiche le film si trouve.</td></tr>
+                    <tr><td><code>filmographie_acteur_menu</code></td><td>Demande un nom d'acteur, cherche l'acteur, puis affiche sa filmographie.</td></tr>
+                    <tr><td><code>filmographie_realisateur_menu</code></td><td>Demande un nom de realisateur, cherche le realisateur, puis affiche sa filmographie.</td></tr>
+                    <tr><td><code>trajet_menu</code></td><td>Affiche les cinemas, lit depart/arrivee, appelle <code>optimiser_trajet</code>.</td></tr>
+                    <tr><td><code>afficher_menu</code></td><td>Affiche les choix disponibles.</td></tr>
+                    <tr><td><code>main</code></td><td>Charge la base, gere la boucle du menu, libere la memoire.</td></tr>
+                </table>
+            </section>
+
+            <section id="personne">
+                <h2>8. Fonctions de personne.c</h2>
+                <table>
+                    <tr><th>Fonction</th><th>Role</th></tr>
+                    <tr><td><code>copier</code></td><td>Copie une chaine avec securite et ajoute <code>'\0'</code>.</td></tr>
+                    <tr><td><code>creer_date</code></td><td>Cree une structure <code>Date</code>.</td></tr>
+                    <tr><td><code>creer_personne</code></td><td>Cree une structure <code>Personne</code>.</td></tr>
+                    <tr><td><code>creer_acteur</code></td><td>Cree un acteur en reutilisant <code>creer_personne</code>.</td></tr>
+                    <tr><td><code>creer_realisateur</code></td><td>Cree un realisateur en reutilisant <code>creer_personne</code>.</td></tr>
+                    <tr><td><code>ajouter_acteur</code></td><td>Alloue un noeud et l'ajoute en tete de liste.</td></tr>
+                    <tr><td><code>ajouter_realisateur</code></td><td>Meme principe pour les realisateurs.</td></tr>
+                    <tr><td><code>chercher_acteur</code></td><td>Parcourt la liste et cherche par nom avec <code>strcmp</code>.</td></tr>
+                    <tr><td><code>chercher_realisateur</code></td><td>Parcourt la liste des realisateurs et cherche par nom.</td></tr>
+                    <tr><td><code>afficher_acteur</code></td><td>Affiche les informations d'un acteur.</td></tr>
+                    <tr><td><code>afficher_realisateur</code></td><td>Affiche une fiche realisateur.</td></tr>
+                    <tr><td><code>lister_acteurs</code></td><td>Affiche tous les acteurs.</td></tr>
+                    <tr><td><code>lister_realisateurs</code></td><td>Affiche tous les realisateurs.</td></tr>
+                    <tr><td><code>liberer_acteurs</code></td><td>Libere chaque noeud de la liste d'acteurs.</td></tr>
+                    <tr><td><code>liberer_realisateurs</code></td><td>Libere chaque noeud de la liste de realisateurs.</td></tr>
+                </table>
+            </section>
+
+            <section id="film">
+                <h2>9. Fonctions de film.c</h2>
+                <table>
+                    <tr><th>Fonction</th><th>Role</th></tr>
+                    <tr><td><code>copier</code></td><td>Copie une chaine dans un tableau de caracteres.</td></tr>
+                    <tr><td><code>comparer_sans_casse</code></td><td>Compare deux chaines sans tenir compte des majuscules/minuscules.</td></tr>
+                    <tr><td><code>genre_en_texte</code></td><td>Convertit un <code>Genre</code> en texte affichable.</td></tr>
+                    <tr><td><code>creer_film</code></td><td>Initialise un film, son tableau d'acteurs et son pointeur suivant.</td></tr>
+                    <tr><td><code>ajouter_acteur_film</code></td><td>Ajoute un pointeur d'acteur dans le film, maximum 3 acteurs.</td></tr>
+                    <tr><td><code>ajouter_film</code></td><td>Alloue un film et l'ajoute en tete de liste chainee.</td></tr>
+                    <tr><td><code>chercher_film</code></td><td>Recherche un film par titre, sans tenir compte de la casse.</td></tr>
+                    <tr><td><code>afficher_film</code></td><td>Affiche la fiche complete du film.</td></tr>
+                    <tr><td><code>lister_films</code></td><td>Parcourt la liste des films et les affiche.</td></tr>
+                    <tr><td><code>afficher_filmographie_acteur</code></td><td>Parcourt tous les films et verifie si l'acteur apparait.</td></tr>
+                    <tr><td><code>afficher_filmographie_realisateur</code></td><td>Parcourt tous les films et compare le pointeur du realisateur.</td></tr>
+                    <tr><td><code>liberer_films</code></td><td>Libere chaque noeud de la liste des films.</td></tr>
+                </table>
+                <div class="note">
+                    <strong>Important :</strong> <code>liberer_films</code> ne libere pas les acteurs ni les realisateurs, car les films ne les possedent pas. Ils ne font que les pointer.
+                </div>
+            </section>
+
+            <section id="fichier">
+                <h2>10. Fonctions de fichier.c</h2>
+                <table>
+                    <tr><th>Fonction</th><th>Role</th></tr>
+                    <tr><td><code>enlever_fin_ligne</code></td><td>Retire <code>\n</code> et <code>\r</code> d'une ligne lue depuis le CSV.</td></tr>
+                    <tr><td><code>texte_en_genre</code></td><td>Transforme un texte du CSV en valeur <code>Genre</code>.</td></tr>
+                    <tr><td><code>charger_acteur</code></td><td>Cree un acteur depuis une ligne CSV et l'ajoute a la liste.</td></tr>
+                    <tr><td><code>charger_realisateur</code></td><td>Cree un realisateur depuis une ligne CSV et l'ajoute a la liste.</td></tr>
+                    <tr><td><code>charger_film</code></td><td>Cree un film, retrouve ses acteurs/realisateur, puis l'ajoute a la liste.</td></tr>
+                    <tr><td><code>decouper_ligne</code></td><td>Utilise <code>strtok</code> pour separer une ligne avec le separateur <code>;</code>.</td></tr>
+                    <tr><td><code>charger_base</code></td><td>Ouvre le CSV, lit ligne par ligne, ignore les commentaires et appelle la bonne fonction selon le type de ligne.</td></tr>
+                </table>
+            </section>
+
+            <section id="cinema">
+                <h2>11. Fonctions de cinema.c</h2>
+                <table>
+                    <tr><th>Fonction</th><th>Role</th></tr>
+                    <tr><td><code>copier_chaine</code></td><td>Copie une chaine dans un tableau. Si la source vaut <code>NULL</code>, utilise une chaine vide.</td></tr>
+                    <tr><td><code>compter_cinemas</code></td><td>Compte le nombre de cinemas du graphe.</td></tr>
+                    <tr><td><code>index_cinema</code></td><td>Retrouve l'indice d'un cinema dans un tableau de pointeurs.</td></tr>
+                    <tr><td><code>route_existe</code></td><td>Verifie si une route existe deja entre deux cinemas.</td></tr>
+                    <tr><td><code>ajouter_arete</code></td><td>Ajoute une route orientee entre deux cinemas. Fonction interne.</td></tr>
+                    <tr><td><code>initialiser_graphe</code></td><td>Met la liste de cinemas a <code>NULL</code>.</td></tr>
+                    <tr><td><code>creer_cinema</code></td><td>Alloue un cinema avec <code>malloc</code> et initialise ses champs.</td></tr>
+                    <tr><td><code>ajouter_cinema</code></td><td>Ajoute un cinema en tete de la liste du graphe.</td></tr>
+                    <tr><td><code>trouver_cinema_par_id</code></td><td>Parcourt la liste pour trouver un cinema par son id.</td></tr>
+                    <tr><td><code>ajouter_route</code></td><td>Ajoute une route dans les deux sens, donc le graphe est non oriente.</td></tr>
+                    <tr><td><code>lister_cinemas</code></td><td>Affiche les cinemas et leurs voisins.</td></tr>
+                    <tr><td><code>optimiser_trajet</code></td><td>Applique Dijkstra pour trouver le plus court chemin.</td></tr>
+                    <tr><td><code>liberer_graphe</code></td><td>Libere toutes les routes puis tous les cinemas.</td></tr>
+                </table>
+
+                <h3>Dijkstra dans le projet</h3>
+                <p><code>optimiser_trajet</code> utilise quatre tableaux :</p>
+                <ul>
+                    <li><code>tableau</code> : contient les pointeurs vers les cinemas ;</li>
+                    <li><code>distance</code> : meilleure distance connue depuis le depart ;</li>
+                    <li><code>visite</code> : indique si un cinema est deja traite ;</li>
+                    <li><code>precedent</code> : permet de reconstruire le chemin final.</li>
+                </ul>
+                <div class="flow">
+                    <div class="step"><span>1</span><div>Toutes les distances valent <code>INF</code>, sauf le depart qui vaut <code>0</code>.</div></div>
+                    <div class="step"><span>2</span><div>On choisit le cinema non visite qui a la plus petite distance.</div></div>
+                    <div class="step"><span>3</span><div>On regarde ses voisins et on met a jour leurs distances si un chemin plus court est trouve.</div></div>
+                    <div class="step"><span>4</span><div>A la fin, on reconstruit le chemin en remontant le tableau <code>precedent</code>.</div></div>
+                </div>
+                <div class="oral">
+                    <strong>Lien avec OSPF :</strong> OSPF utilise une logique de plus court chemin. Ici, Dijkstra calcule le meilleur trajet entre deux cinemas.
+                </div>
+            </section>
+
+            <section id="duplication">
+                <h2>12. Pourquoi les donnees ne sont pas dupliquees ?</h2>
+                <p>Dans un mauvais modele, chaque film pourrait contenir directement toutes les informations de son realisateur : nom, prenom, date de naissance et nationalite. Si David Fincher realise trois films, ces informations seraient copiees trois fois.</p>
+                <p>Dans ce projet, un film contient seulement :</p>
+                <pre><code>Realisateur *realisateur;
+Acteur *acteurs[NB_ACTEURS_MAX];</code></pre>
+                <p>Les personnes sont stockees une seule fois dans leurs listes. Les films pointent vers ces personnes.</p>
+                <div class="diagram">Liste realisateurs
+  [David Fincher] &lt;---- Fight Club
+        ^          &lt;---- Seven
+        |          &lt;---- The Game
+
+Liste acteurs
+  [Brad Pitt] &lt;---- Fight Club
+       ^      &lt;---- Seven</div>
+            </section>
+
+            <section id="listes">
+                <h2>13. Pourquoi utiliser des listes chainees ?</h2>
+                <p>Le sujet indique qu'une liste lineaire chainee est judicieuse pour optimiser l'allocation memoire.</p>
+                <div class="cards">
+                    <div class="card">
+                        <h3>Avantages</h3>
+                        <ul>
+                            <li>Pas besoin de connaitre le nombre d'elements a l'avance.</li>
+                            <li>Allocation dynamique avec <code>malloc</code>.</li>
+                            <li>On alloue seulement ce dont on a besoin.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Limite</h3>
+                        <p>La recherche est lineaire : il faut parcourir la liste depuis le debut.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="headers">
+                <h2>14. Pourquoi separer .h et .c ?</h2>
+                <p>Les fichiers <code>.h</code> contiennent les structures, constantes et prototypes. Les fichiers <code>.c</code> contiennent l'implementation des fonctions.</p>
+                <p>Cette separation rend le projet plus clair : chaque module a une responsabilite precise et <code>main.c</code> reste lisible.</p>
+                <div class="note">
+                    <strong>A dire au prof :</strong> "Les .h decrivent l'interface du module, les .c contiennent le code reel."
+                </div>
+            </section>
+
+            <section id="questions">
+                <h2>15. Questions possibles et reponses</h2>
+
+                <details open>
+                    <summary>1. Est-ce que votre programme est une vraie base de donnees ?</summary>
+                    <p>Non, ce n'est pas une base SQL. C'est une base de donnees simulee en C. Les donnees sont stockees dans des structures et listes chainees en memoire, et chargees depuis un CSV.</p>
+                </details>
+                <details>
+                    <summary>2. Ou sont stockees les donnees ?</summary>
+                    <p>Sur disque, elles sont dans <code>donnees.csv</code>. En memoire, elles sont dans <code>NoeudActeur *acteurs</code>, <code>NoeudRealisateur *realisateurs</code>, <code>Film *films</code> et <code>GrapheCinema graphe</code>.</p>
+                </details>
+                <details>
+                    <summary>3. Comment evitez-vous la duplication des donnees ?</summary>
+                    <p>Un film ne copie pas les informations des acteurs et du realisateur. Il contient des pointeurs vers des acteurs et realisateurs deja stockes dans leurs listes.</p>
+                </details>
+                <details>
+                    <summary>4. Pourquoi la filmographie n'est-elle pas stockee dans l'acteur ?</summary>
+                    <p>Pour eviter la redondance. La filmographie est calculee en parcourant la liste des films et en verifiant si l'acteur apparait dans chaque film.</p>
+                </details>
+                <details>
+                    <summary>5. Que se passe-t-il quand on cherche la filmographie de David Fincher ?</summary>
+                    <p>Le programme cherche le realisateur Fincher, parcourt tous les films et affiche ceux dont <code>film-&gt;realisateur</code> pointe vers ce realisateur.</p>
+                </details>
+                <details>
+                    <summary>6. Pourquoi comparer des pointeurs au lieu de comparer des noms ?</summary>
+                    <p>Parce que les films referencent directement les personnes existantes. Deux pointeurs egaux designent exactement la meme personne en memoire.</p>
+                </details>
+                <details>
+                    <summary>7. Pourquoi les acteurs et realisateurs sont avant les films dans le CSV ?</summary>
+                    <p>Parce qu'un film doit pointer vers des acteurs et un realisateur deja crees. Si on lit les films avant, les pointeurs n'existent pas encore.</p>
+                </details>
+                <details>
+                    <summary>8. Pourquoi utiliser malloc ?</summary>
+                    <p><code>malloc</code> permet d'allouer dynamiquement les noeuds des listes chainees et les elements du graphe selon le contenu du CSV.</p>
+                </details>
+                <details>
+                    <summary>9. Ou liberez-vous la memoire ?</summary>
+                    <p>A la fin de <code>main</code>, avec <code>liberer_films</code>, <code>liberer_acteurs</code>, <code>liberer_realisateurs</code> et <code>liberer_graphe</code>.</p>
+                </details>
+                <details>
+                    <summary>10. Pourquoi liberer les films ne libere pas les acteurs ?</summary>
+                    <p>Les films ne possedent pas les acteurs. Ils ont seulement des pointeurs vers eux. Les acteurs sont liberes par leur propre liste.</p>
+                </details>
+                <details>
+                    <summary>11. Pourquoi utiliser un enum pour les genres ?</summary>
+                    <p>Un enum limite les genres aux valeurs imposees par le sujet et evite les chaines incoherentes.</p>
+                </details>
+                <details>
+                    <summary>12. Comment fonctionne la recherche d'un film ?</summary>
+                    <p>Le programme parcourt la liste chainee des films et compare le titre saisi avec le titre du film. La comparaison ignore les majuscules/minuscules.</p>
+                </details>
+                <details>
+                    <summary>13. Pourquoi utiliser fgets plutot que scanf ?</summary>
+                    <p><code>fgets</code> lit une ligne complete et evite les problemes de retour a la ligne restant dans le buffer clavier. Ensuite <code>sscanf</code> convertit si besoin.</p>
+                </details>
+                <details>
+                    <summary>14. Comment fonctionne le chargement CSV ?</summary>
+                    <p><code>charger_base</code> ouvre le fichier avec <code>fopen</code>, lit les lignes avec <code>fgets</code>, les decoupe avec <code>strtok</code>, puis cree les bonnes structures selon le premier champ.</p>
+                </details>
+                <details>
+                    <summary>15. Quelles sont les limites du CSV ?</summary>
+                    <p>Le format est volontairement simple : les champs ne doivent pas contenir <code>;</code>, et l'ordre des donnees doit etre respecte.</p>
+                </details>
+                <details>
+                    <summary>16. Comment est represente le graphe ?</summary>
+                    <p>Le graphe contient une liste de cinemas. Chaque cinema contient une liste de routes vers ses voisins.</p>
+                </details>
+                <details>
+                    <summary>17. Pourquoi ajouter une route dans les deux sens ?</summary>
+                    <p>Parce que les routes sont considerees comme non orientees : si on peut aller de A a B, on peut aussi aller de B a A.</p>
+                </details>
+                <details>
+                    <summary>18. Quel algorithme utilisez-vous pour le trajet ?</summary>
+                    <p>Dijkstra. C'est coherent avec OSPF, qui utilise aussi une logique de plus court chemin.</p>
+                </details>
+                <details>
+                    <summary>19. Expliquez Dijkstra simplement.</summary>
+                    <p>On part du cinema de depart avec une distance 0. A chaque etape, on choisit le cinema non visite avec la plus petite distance, puis on met a jour les distances de ses voisins.</p>
+                </details>
+                <details>
+                    <summary>20. A quoi sert le tableau precedent ?</summary>
+                    <p>Il permet de reconstruire le chemin final en remontant depuis le cinema d'arrivee vers le depart.</p>
+                </details>
+                <details>
+                    <summary>21. Pourquoi utiliser INF ?</summary>
+                    <p><code>INF</code> represente une distance initialement inconnue ou infinie.</p>
+                </details>
+                <details>
+                    <summary>22. Que se passe-t-il si un cinema n'existe pas ?</summary>
+                    <p><code>optimiser_trajet</code> affiche un message d'erreur et s'arrete proprement.</p>
+                </details>
+                <details>
+                    <summary>23. Pourquoi certaines fonctions sont static ?</summary>
+                    <p><code>static</code> limite la fonction au fichier <code>.c</code>. C'est utile pour les fonctions internes comme <code>copier</code> ou <code>decouper_ligne</code>.</p>
+                </details>
+                <details>
+                    <summary>24. Pourquoi utiliser des fichiers .h ?</summary>
+                    <p>Les <code>.h</code> contiennent les prototypes et structures visibles par les autres fichiers. Ils separent l'interface de l'implementation.</p>
+                </details>
+                <details>
+                    <summary>25. Comment compiler le projet ?</summary>
+                    <pre><code>gcc -Wall main.c personne.c film.c cinema.c fichier.c -o CineEsiee.exe</code></pre>
+                    <p>Version stricte :</p>
+                    <pre><code>gcc -Wall -Wextra -pedantic -std=c99 main.c personne.c film.c cinema.c fichier.c -o CineEsiee.exe</code></pre>
+                </details>
+                <details>
+                    <summary>26. Pourquoi viser 0 warning ?</summary>
+                    <p>Les warnings signalent souvent des erreurs potentielles. Un programme a 0 warning est plus propre et plus fiable.</p>
+                </details>
+                <details>
+                    <summary>27. Que se passe-t-il si donnees.csv est absent ?</summary>
+                    <p><code>charger_base</code> retourne 0, puis <code>main</code> affiche une erreur et quitte avec <code>return 1</code>.</p>
+                </details>
+                <details>
+                    <summary>28. Pourquoi le menu contient plus que les 4 options obligatoires ?</summary>
+                    <p>Les 4 options obligatoires sont presentes. Les autres sont des extensions utiles : acteurs, trajet et filmographies.</p>
+                </details>
+                <details>
+                    <summary>29. Quel est le role de nb_acteurs ?</summary>
+                    <p><code>nb_acteurs</code> indique combien de cases du tableau <code>acteurs</code> sont reellement utilisees.</p>
+                </details>
+                <details>
+                    <summary>30. Pourquoi NB_ACTEURS_MAX vaut 3 ?</summary>
+                    <p>Le sujet demande de stocker les acteurs principaux de 1 a 3. Le tableau a donc une taille maximale de 3.</p>
+                </details>
+            </section>
+
+            <section id="resume">
+                <h2>16. Resume oral en 1 minute</h2>
+                <p>"Mon projet CineEsiee simule une base de donnees de films en C. Les donnees sont lues depuis <code>donnees.csv</code>. En memoire, j'utilise des listes chainees pour les acteurs, les realisateurs et les films. Un film contient un pointeur vers son realisateur et un tableau de pointeurs vers ses acteurs principaux, donc les informations des personnes ne sont pas dupliquees."</p>
+                <p>"Le menu permet de lister les films, lister les realisateurs, rechercher un film, afficher des filmographies et calculer un trajet entre cinemas. La partie trajet utilise un graphe pondere et l'algorithme de Dijkstra, inspire du fonctionnement d'OSPF. A la fin du programme, toute la memoire allouee dynamiquement est liberee."</p>
+
+                <h3>Points faibles a connaitre</h3>
+                <ul>
+                    <li>Le CSV est simple et ne gere pas les champs contenant <code>;</code>.</li>
+                    <li>La recherche d'acteur/realisateur se fait par nom exact.</li>
+                    <li>Le programme ne modifie pas le CSV depuis le menu.</li>
+                    <li>Le trajet calcule le plus court chemin entre deux cinemas, pas une tournee complete avec plusieurs livraisons.</li>
+                    <li>La recherche dans les listes chainees est lineaire.</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
