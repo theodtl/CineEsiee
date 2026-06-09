@@ -12,4 +12,11 @@ int charger_base(const char *nom_fichier,
                  NoeudRealisateur **realisateurs,
                  GrapheCinema *graphe);
 
+/* Reecrit le fichier CSV avec l'etat actuel de la base en memoire. */
+int sauvegarder_base(const char *nom_fichier,
+                     Film *films,
+                     NoeudActeur *acteurs,
+                     NoeudRealisateur *realisateurs,
+                     GrapheCinema *graphe);
+
 #endif

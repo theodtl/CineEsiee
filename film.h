@@ -44,6 +44,7 @@ const char *genre_en_texte(Genre genre);
 Film creer_film(const char *titre, int annee, int duree, Genre genre, Realisateur *realisateur);
 void ajouter_acteur_film(Film *film, Acteur *acteur);
 Film *ajouter_film(Film *liste, Film film);
+int supprimer_film(Film **liste, const char *titre);
 
 /* Requetes principales sur les films. */
 Film *chercher_film(Film *liste, const char *titre);

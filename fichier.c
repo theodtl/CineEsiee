@@ -41,6 +41,32 @@ static Genre texte_en_genre(const char *texte)
     return DRAME;
 }
 
+/* Convertit un genre en texte compatible avec le CSV. */
+static const char *genre_en_csv(Genre genre)
+{
+    switch (genre)
+    {
+    case ACTION:
+        return "ACTION";
+    case HORREUR:
+        return "HORREUR";
+    case COMEDIE:
+        return "COMEDIE";
+    case DOCUMENTAIRE:
+        return "DOCUMENTAIRE";
+    case POLICIER:
+        return "POLICIER";
+    case DRAME:
+        return "DRAME";
+    case ANIMATION:
+        return "ANIMATION";
+    case SCIENCE_FICTION:
+        return "SCIENCE_FICTION";
+    default:
+        return "DRAME";
+    }
+}
+
 /* Cree un acteur depuis les champs d'une ligne CSV. */
 static void charger_acteur(char *morceaux[], NoeudActeur **acteurs)
 {
@@ -166,6 +192,104 @@ int charger_base(const char *nom_fichier,
         {
             ajouter_route(graphe, atoi(morceaux[1]), atoi(morceaux[2]), atoi(morceaux[3]));
         }
+    }
+
+    fclose(fichier);
+    return 1;
+}
+
+/* Reecrit le fichier CSV pour rendre les modifications persistantes. */
+int sauvegarder_base(const char *nom_fichier,
+                     Film *films,
+                     NoeudActeur *acteurs,
+                     NoeudRealisateur *realisateurs,
+                     GrapheCinema *graphe)
+{
+    int i;
+    FILE *fichier = fopen(nom_fichier, "w");
+    Cinema *cinema;
+    Arete *route;
+
+    if (fichier == NULL)
+    {
+        return 0;
+    }
+
+    fprintf(fichier, "# Format :\n");
+    fprintf(fichier, "# ACTEUR;nom;prenom;jour;mois;annee;nationalite\n");
+    fprintf(fichier, "# REALISATEUR;nom;prenom;jour;mois;annee;nationalite\n");
+    fprintf(fichier, "# FILM;titre;annee;duree;genre;nom_realisateur;nom_acteur1;nom_acteur2;nom_acteur3\n");
+    fprintf(fichier, "# CINEMA;id;nom\n");
+    fprintf(fichier, "# ROUTE;id_depart;id_arrivee;distance\n\n");
+
+    while (acteurs != NULL)
+    {
+        fprintf(fichier, "ACTEUR;%s;%s;%d;%d;%d;%s\n",
+                acteurs->acteur.infos.nom,
+                acteurs->acteur.infos.prenom,
+                acteurs->acteur.infos.naissance.jour,
+                acteurs->acteur.infos.naissance.mois,
+                acteurs->acteur.infos.naissance.annee,
+                acteurs->acteur.infos.nationalite);
+        acteurs = acteurs->suivant;
+    }
+
+    fprintf(fichier, "\n");
+    while (realisateurs != NULL)
+    {
+        fprintf(fichier, "REALISATEUR;%s;%s;%d;%d;%d;%s\n",
+                realisateurs->realisateur.infos.nom,
+                realisateurs->realisateur.infos.prenom,
+                realisateurs->realisateur.infos.naissance.jour,
+                realisateurs->realisateur.infos.naissance.mois,
+                realisateurs->realisateur.infos.naissance.annee,
+                realisateurs->realisateur.infos.nationalite);
+        realisateurs = realisateurs->suivant;
+    }
+
+    fprintf(fichier, "\n");
+    while (films != NULL)
+    {
+        fprintf(fichier, "FILM;%s;%d;%d;%s;%s",
+                films->titre,
+                films->annee,
+                films->duree,
+                genre_en_csv(films->genre),
+                films->realisateur->infos.nom);
+
+        for (i = 0; i < films->nb_acteurs; i++)
+        {
+            fprintf(fichier, ";%s", films->acteurs[i]->infos.nom);
+        }
+        fprintf(fichier, "\n");
+        films = films->suivant;
+    }
+
+    fprintf(fichier, "\n");
+    cinema = graphe->cinemas;
+    while (cinema != NULL)
+    {
+        fprintf(fichier, "CINEMA;%d;%s\n", cinema->id, cinema->nom);
+        cinema = cinema->suivant;
+    }
+
+    fprintf(fichier, "\n");
+    cinema = graphe->cinemas;
+    while (cinema != NULL)
+    {
+        route = cinema->voisins;
+        while (route != NULL)
+        {
+            if (route->destination != NULL && cinema->id < route->destination->id)
+            {
+                fprintf(fichier, "ROUTE;%d;%d;%d\n",
+                        cinema->id,
+                        route->destination->id,
+                        route->distance);
+            }
+            route = route->suivant;
+        }
+        cinema = cinema->suivant;
     }
 
     fclose(fichier);

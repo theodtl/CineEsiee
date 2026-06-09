@@ -287,6 +287,8 @@ Le fichier donnees.csv contient plusieurs types de lignes :
     ROUTE;id_depart;id_arrivee;distance
 
 Le chargement est fait par la fonction charger_base dans fichier.c.
+Quand un film est ajoute ou supprime depuis le menu, la fonction
+sauvegarder_base reecrit donnees.csv.
 
 Ordre important :
 
@@ -489,6 +491,11 @@ ajouter_film
     Ajoute le film en tete de liste chainee.
     Retourne la nouvelle tete de liste.
 
+supprimer_film
+    Cherche un film par son titre.
+    Retire le noeud de la liste chainee.
+    Libere le noeud du film avec free.
+
 chercher_film
     Parcourt la liste des films.
     Compare le titre demande avec le titre du film.
@@ -571,6 +578,11 @@ charger_base
         CINEMA      -> ajouter_cinema
         ROUTE       -> ajouter_route
     Ferme le fichier avec fclose.
+
+sauvegarder_base
+    Ouvre donnees.csv en ecriture.
+    Reecrit les acteurs, realisateurs, films, cinemas et routes.
+    Elle est appelee apres l'ajout ou la suppression d'un film.
 
 
 11. Role des fonctions de cinema.c
@@ -1036,7 +1048,8 @@ Il vaut mieux connaitre les limites du projet si le professeur les demande.
 
 - Le CSV est simple : il ne gere pas les champs avec des ';' a l'interieur.
 - La recherche d'acteur/realisateur se fait par nom exact.
-- Le programme ne modifie pas le CSV depuis le menu.
+- Le programme modifie le CSV pour les films, mais pas pour creer de nouveaux
+  acteurs ou realisateurs.
 - Le trajet calcule le plus court chemin entre deux cinemas, pas une tournee
   complete avec plusieurs livraisons.
 - Les listes chainees sont simples, mais la recherche est lineaire.
@@ -1053,7 +1066,9 @@ sont lues depuis donnees.csv. En memoire, j'utilise des listes chainees pour les
 acteurs, les realisateurs et les films. Un film contient un pointeur vers son
 realisateur et un tableau de pointeurs vers ses acteurs principaux, donc les
 informations des personnes ne sont pas dupliquees. Le menu permet de lister les
-films, lister les realisateurs, rechercher un film, afficher des filmographies
-et calculer un trajet entre cinemas. La partie trajet utilise un graphe pondere
-et l'algorithme de Dijkstra, inspire du fonctionnement d'OSPF. A la fin du
-programme, toute la memoire allouee dynamiquement est liberee."
+films, lister les realisateurs, rechercher un film, ajouter ou supprimer un
+film, afficher des filmographies et calculer un trajet entre cinemas. Quand un
+film est ajoute ou supprime, donnees.csv est reecrit. La partie trajet utilise
+un graphe pondere et l'algorithme de Dijkstra, inspire du fonctionnement
+d'OSPF. A la fin du programme, toute la memoire allouee dynamiquement est
+liberee."

@@ -101,6 +101,42 @@ Film *ajouter_film(Film *liste, Film film)
     return nouveau;
 }
 
+/* Supprime un film de la liste a partir de son titre. */
+int supprimer_film(Film **liste, const char *titre)
+{
+    Film *courant;
+    Film *precedent = NULL;
+
+    if (liste == NULL)
+    {
+        return 0;
+    }
+
+    courant = *liste;
+    while (courant != NULL)
+    {
+        if (comparer_sans_casse(courant->titre, titre))
+        {
+            if (precedent == NULL)
+            {
+                *liste = courant->suivant;
+            }
+            else
+            {
+                precedent->suivant = courant->suivant;
+            }
+
+            free(courant);
+            return 1;
+        }
+
+        precedent = courant;
+        courant = courant->suivant;
+    }
+
+    return 0;
+}
+
 /* Recherche un film par titre, sans tenir compte de la casse. */
 Film *chercher_film(Film *liste, const char *titre)
 {

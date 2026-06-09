@@ -413,7 +413,7 @@
                     </div>
                     <div class="card">
                         <h3>fichier.h / fichier.c</h3>
-                        <p>Charge les donnees depuis <code>donnees.csv</code> et construit les listes en memoire.</p>
+                        <p>Charge les donnees depuis <code>donnees.csv</code>, construit les listes en memoire et sauvegarde les ajouts/suppressions de films.</p>
                     </div>
                     <div class="card">
                         <h3>donnees.csv</h3>
@@ -547,7 +547,7 @@ typedef struct
             </section>
 
             <section id="csv">
-                <h2>5. Chargement depuis donnees.csv</h2>
+                <h2>5. Chargement et sauvegarde CSV</h2>
                 <p>Le CSV contient plusieurs types de lignes. Le premier champ indique le type de donnee.</p>
                 <pre><code>ACTEUR;nom;prenom;jour;mois;annee;nationalite
 REALISATEUR;nom;prenom;jour;mois;annee;nationalite
@@ -565,6 +565,9 @@ ROUTE;id_depart;id_arrivee;distance</code></pre>
 
                 <div class="warning">
                     <strong>Limite du CSV :</strong> les champs ne doivent pas contenir le caractere <code>;</code>. Le format est volontairement simple pour rester defendable dans un TP C.
+                </div>
+                <div class="note">
+                    <strong>Persistance :</strong> apres un ajout ou une suppression de film, <code>sauvegarder_base</code> reecrit <code>donnees.csv</code>. Les modifications sont donc conservees apres fermeture du programme.
                 </div>
             </section>
 
@@ -594,7 +597,12 @@ liberer_graphe(&amp;graphe);</code></pre>
                     <tr><td><code>lire_choix</code></td><td>Lit le choix du menu avec <code>fgets</code>, puis convertit avec <code>sscanf</code>.</td></tr>
                     <tr><td><code>lire_entier</code></td><td>Lit un entier pour les ids de cinemas.</td></tr>
                     <tr><td><code>pause_console</code></td><td>Attend que l'utilisateur appuie sur Entree.</td></tr>
+                    <tr><td><code>lire_chaine</code></td><td>Lit une chaine avec <code>fgets</code>, puis retire le retour a la ligne.</td></tr>
                     <tr><td><code>rechercher_film_menu</code></td><td>Demande un titre, appelle <code>chercher_film</code>, puis affiche le film si trouve.</td></tr>
+                    <tr><td><code>afficher_genres</code></td><td>Affiche les genres disponibles pour creer un film.</td></tr>
+                    <tr><td><code>choisir_genre</code></td><td>Convertit le choix utilisateur en valeur de l'enum <code>Genre</code>.</td></tr>
+                    <tr><td><code>ajouter_film_menu</code></td><td>Cree un film avec un realisateur et des acteurs existants, puis reecrit <code>donnees.csv</code>.</td></tr>
+                    <tr><td><code>supprimer_film_menu</code></td><td>Supprime un film de la liste, puis reecrit <code>donnees.csv</code>.</td></tr>
                     <tr><td><code>filmographie_acteur_menu</code></td><td>Demande un nom d'acteur, cherche l'acteur, puis affiche sa filmographie.</td></tr>
                     <tr><td><code>filmographie_realisateur_menu</code></td><td>Demande un nom de realisateur, cherche le realisateur, puis affiche sa filmographie.</td></tr>
                     <tr><td><code>trajet_menu</code></td><td>Affiche les cinemas, lit depart/arrivee, appelle <code>optimiser_trajet</code>.</td></tr>
@@ -635,6 +643,7 @@ liberer_graphe(&amp;graphe);</code></pre>
                     <tr><td><code>creer_film</code></td><td>Initialise un film, son tableau d'acteurs et son pointeur suivant.</td></tr>
                     <tr><td><code>ajouter_acteur_film</code></td><td>Ajoute un pointeur d'acteur dans le film, maximum 3 acteurs.</td></tr>
                     <tr><td><code>ajouter_film</code></td><td>Alloue un film et l'ajoute en tete de liste chainee.</td></tr>
+                    <tr><td><code>supprimer_film</code></td><td>Retire un film de la liste chainee a partir de son titre et libere le noeud.</td></tr>
                     <tr><td><code>chercher_film</code></td><td>Recherche un film par titre, sans tenir compte de la casse.</td></tr>
                     <tr><td><code>afficher_film</code></td><td>Affiche la fiche complete du film.</td></tr>
                     <tr><td><code>lister_films</code></td><td>Parcourt la liste des films et les affiche.</td></tr>
@@ -658,6 +667,7 @@ liberer_graphe(&amp;graphe);</code></pre>
                     <tr><td><code>charger_film</code></td><td>Cree un film, retrouve ses acteurs/realisateur, puis l'ajoute a la liste.</td></tr>
                     <tr><td><code>decouper_ligne</code></td><td>Utilise <code>strtok</code> pour separer une ligne avec le separateur <code>;</code>.</td></tr>
                     <tr><td><code>charger_base</code></td><td>Ouvre le CSV, lit ligne par ligne, ignore les commentaires et appelle la bonne fonction selon le type de ligne.</td></tr>
+                    <tr><td><code>sauvegarder_base</code></td><td>Reecrit <code>donnees.csv</code> avec l'etat actuel de la base en memoire.</td></tr>
                 </table>
             </section>
 
@@ -859,7 +869,7 @@ Liste acteurs
                 </details>
                 <details>
                     <summary>28. Pourquoi le menu contient plus que les 4 options obligatoires ?</summary>
-                    <p>Les 4 options obligatoires sont presentes. Les autres sont des extensions utiles : acteurs, trajet et filmographies.</p>
+                    <p>Les 4 options obligatoires sont presentes. Les autres sont des extensions utiles : acteurs, ajout/suppression de film, trajet et filmographies.</p>
                 </details>
                 <details>
                     <summary>29. Quel est le role de nb_acteurs ?</summary>
@@ -874,13 +884,13 @@ Liste acteurs
             <section id="resume">
                 <h2>16. Resume oral en 1 minute</h2>
                 <p>"Mon projet CineEsiee simule une base de donnees de films en C. Les donnees sont lues depuis <code>donnees.csv</code>. En memoire, j'utilise des listes chainees pour les acteurs, les realisateurs et les films. Un film contient un pointeur vers son realisateur et un tableau de pointeurs vers ses acteurs principaux, donc les informations des personnes ne sont pas dupliquees."</p>
-                <p>"Le menu permet de lister les films, lister les realisateurs, rechercher un film, afficher des filmographies et calculer un trajet entre cinemas. La partie trajet utilise un graphe pondere et l'algorithme de Dijkstra, inspire du fonctionnement d'OSPF. A la fin du programme, toute la memoire allouee dynamiquement est liberee."</p>
+                <p>"Le menu permet de lister les films, lister les realisateurs, rechercher un film, ajouter ou supprimer un film, afficher des filmographies et calculer un trajet entre cinemas. Quand un film est ajoute ou supprime, <code>donnees.csv</code> est reecrit. La partie trajet utilise un graphe pondere et l'algorithme de Dijkstra, inspire du fonctionnement d'OSPF. A la fin du programme, toute la memoire allouee dynamiquement est liberee."</p>
 
                 <h3>Points faibles a connaitre</h3>
                 <ul>
                     <li>Le CSV est simple et ne gere pas les champs contenant <code>;</code>.</li>
                     <li>La recherche d'acteur/realisateur se fait par nom exact.</li>
-                    <li>Le programme ne modifie pas le CSV depuis le menu.</li>
+                    <li>Le programme modifie le CSV pour les films, mais pas pour creer de nouveaux acteurs ou realisateurs.</li>
                     <li>Le trajet calcule le plus court chemin entre deux cinemas, pas une tournee complete avec plusieurs livraisons.</li>
                     <li>La recherche dans les listes chainees est lineaire.</li>
                 </ul>

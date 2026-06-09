@@ -59,6 +59,19 @@ static int lire_entier(const char *message)
     return valeur;
 }
 
+/* Lit une chaine et retire le retour a la ligne final. */
+static void lire_chaine(const char *message, char chaine[], int taille)
+{
+    printf("%s", message);
+    if (fgets(chaine, taille, stdin) == NULL)
+    {
+        chaine[0] = '\0';
+        return;
+    }
+
+    vider_fin_ligne(chaine);
+}
+
 /* Met le programme en pause pour laisser le temps de lire le resultat. */
 static void pause_console(void)
 {
@@ -73,9 +86,7 @@ static void rechercher_film_menu(Film *films)
     char titre[TITRE_MAX];
     Film *film;
 
-    printf("Titre du film : ");
-    fgets(titre, TITRE_MAX, stdin);
-    vider_fin_ligne(titre);
+    lire_chaine("Titre du film : ", titre, TITRE_MAX);
 
     film = chercher_film(films, titre);
     if (film == NULL)
@@ -88,15 +99,139 @@ static void rechercher_film_menu(Film *films)
     }
 }
 
+/* Affiche les genres disponibles pour la creation d'un film. */
+static void afficher_genres(void)
+{
+    printf("1. Action\n");
+    printf("2. Horreur\n");
+    printf("3. Comedie\n");
+    printf("4. Documentaire\n");
+    printf("5. Policier\n");
+    printf("6. Drame\n");
+    printf("7. Animation\n");
+    printf("8. Science-Fiction\n");
+}
+
+/* Convertit un choix utilisateur en genre. */
+static Genre choisir_genre(void)
+{
+    int choix;
+
+    afficher_genres();
+    choix = lire_entier("Genre : ");
+
+    if (choix < ACTION || choix > SCIENCE_FICTION)
+    {
+        printf("Genre invalide, Drame choisi par defaut.\n");
+        return DRAME;
+    }
+
+    return (Genre)choix;
+}
+
+/* Ajoute un film puis sauvegarde la modification dans donnees.csv. */
+static void ajouter_film_menu(Film **films,
+                              NoeudActeur *acteurs,
+                              NoeudRealisateur *realisateurs,
+                              GrapheCinema *graphe)
+{
+    char titre[TITRE_MAX];
+    char nom[TEXTE_COURT];
+    int annee;
+    int duree;
+    int nb_acteurs;
+    int i;
+    Film film;
+    Realisateur *realisateur;
+    Acteur *acteur;
+
+    lire_chaine("Titre du nouveau film : ", titre, TITRE_MAX);
+    if (chercher_film(*films, titre) != NULL)
+    {
+        printf("Ce film existe deja.\n");
+        return;
+    }
+
+    annee = lire_entier("Annee de sortie : ");
+    duree = lire_entier("Duree en minutes : ");
+    film = creer_film(titre, annee, duree, choisir_genre(), NULL);
+
+    printf("\nRealisateurs disponibles :\n");
+    lister_realisateurs(realisateurs);
+    lire_chaine("Nom du realisateur : ", nom, TEXTE_COURT);
+    realisateur = chercher_realisateur(realisateurs, nom);
+    if (realisateur == NULL)
+    {
+        printf("Realisateur introuvable. Ajout annule.\n");
+        return;
+    }
+    film.realisateur = realisateur;
+
+    printf("\nActeurs disponibles :\n");
+    lister_acteurs(acteurs);
+    nb_acteurs = lire_entier("Nombre d'acteurs principaux (1 a 3) : ");
+    if (nb_acteurs < 1 || nb_acteurs > NB_ACTEURS_MAX)
+    {
+        printf("Nombre d'acteurs invalide. Ajout annule.\n");
+        return;
+    }
+
+    for (i = 0; i < nb_acteurs; i++)
+    {
+        lire_chaine("Nom de l'acteur : ", nom, TEXTE_COURT);
+        acteur = chercher_acteur(acteurs, nom);
+        if (acteur == NULL)
+        {
+            printf("Acteur introuvable. Ajout annule.\n");
+            return;
+        }
+        ajouter_acteur_film(&film, acteur);
+    }
+
+    *films = ajouter_film(*films, film);
+    if (sauvegarder_base("donnees.csv", *films, acteurs, realisateurs, graphe))
+    {
+        printf("Film ajoute et donnees.csv mis a jour.\n");
+    }
+    else
+    {
+        printf("Film ajoute en memoire, mais erreur de sauvegarde CSV.\n");
+    }
+}
+
+/* Supprime un film puis sauvegarde la modification dans donnees.csv. */
+static void supprimer_film_menu(Film **films,
+                                NoeudActeur *acteurs,
+                                NoeudRealisateur *realisateurs,
+                                GrapheCinema *graphe)
+{
+    char titre[TITRE_MAX];
+
+    lire_chaine("Titre du film a supprimer : ", titre, TITRE_MAX);
+    if (supprimer_film(films, titre))
+    {
+        if (sauvegarder_base("donnees.csv", *films, acteurs, realisateurs, graphe))
+        {
+            printf("Film supprime et donnees.csv mis a jour.\n");
+        }
+        else
+        {
+            printf("Film supprime en memoire, mais erreur de sauvegarde CSV.\n");
+        }
+    }
+    else
+    {
+        printf("Film introuvable.\n");
+    }
+}
+
 /* Demande un acteur puis affiche sa filmographie. */
 static void filmographie_acteur_menu(Film *films, NoeudActeur *acteurs)
 {
     char nom[TEXTE_COURT];
     Acteur *acteur;
 
-    printf("Nom de l'acteur : ");
-    fgets(nom, TEXTE_COURT, stdin);
-    vider_fin_ligne(nom);
+    lire_chaine("Nom de l'acteur : ", nom, TEXTE_COURT);
 
     acteur = chercher_acteur(acteurs, nom);
     if (acteur == NULL)
@@ -115,9 +250,7 @@ static void filmographie_realisateur_menu(Film *films, NoeudRealisateur *realisa
     char nom[TEXTE_COURT];
     Realisateur *realisateur;
 
-    printf("Nom du realisateur : ");
-    fgets(nom, TEXTE_COURT, stdin);
-    vider_fin_ligne(nom);
+    lire_chaine("Nom du realisateur : ", nom, TEXTE_COURT);
 
     realisateur = chercher_realisateur(realisateurs, nom);
     if (realisateur == NULL)
@@ -152,9 +285,11 @@ static void afficher_menu(void)
     printf("3. Rechercher un film par titre\n");
     printf("4. Quitter\n");
     printf("5. Lister les acteurs\n");
-    printf("6. Optimiser un trajet entre cinemas\n");
-    printf("7. Filmographie d'un acteur\n");
-    printf("8. Filmographie d'un realisateur\n");
+    printf("6. Ajouter un film\n");
+    printf("7. Supprimer un film\n");
+    printf("8. Optimiser un trajet entre cinemas\n");
+    printf("9. Filmographie d'un acteur\n");
+    printf("10. Filmographie d'un realisateur\n");
     printf("=====================\n");
 }
 
@@ -204,14 +339,22 @@ int main(void)
             pause_console();
             break;
         case 6:
-            trajet_menu(&graphe);
+            ajouter_film_menu(&films, acteurs, realisateurs, &graphe);
             pause_console();
             break;
         case 7:
-            filmographie_acteur_menu(films, acteurs);
+            supprimer_film_menu(&films, acteurs, realisateurs, &graphe);
             pause_console();
             break;
         case 8:
+            trajet_menu(&graphe);
+            pause_console();
+            break;
+        case 9:
+            filmographie_acteur_menu(films, acteurs);
+            pause_console();
+            break;
+        case 10:
             filmographie_realisateur_menu(films, realisateurs);
             pause_console();
             break;

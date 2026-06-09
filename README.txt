@@ -34,7 +34,7 @@ cinema.h / cinema.c
     Recherche du plus court chemin avec Dijkstra, inspire du principe OSPF.
 
 fichier.h / fichier.c
-    Chargement des donnees au format CSV simple.
+    Chargement et sauvegarde des donnees au format CSV simple.
 
 donnees.csv
     Fichier de donnees charge au demarrage du programme.
@@ -69,9 +69,11 @@ Menu
 3. Rechercher un film par titre
 4. Quitter
 5. Lister les acteurs
-6. Optimiser un trajet entre cinemas
-7. Filmographie d'un acteur
-8. Filmographie d'un realisateur
+6. Ajouter un film
+7. Supprimer un film
+8. Optimiser un trajet entre cinemas
+9. Filmographie d'un acteur
+10. Filmographie d'un realisateur
 
 Format du fichier donnees.csv
 -----------------------------
@@ -87,6 +89,7 @@ ROUTE;id_depart;id_arrivee;distance
 
 Les acteurs et realisateurs doivent etre declares avant les films.
 Les cinemas doivent etre declares avant les routes.
+Quand un film est ajoute ou supprime depuis le menu, donnees.csv est reecrit.
 
 Remarques pour l'oral
 ---------------------
