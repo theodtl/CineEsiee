@@ -91,7 +91,7 @@ Les acteurs et realisateurs doivent etre declares avant les films.
 Les cinemas doivent etre declares avant les routes.
 Quand un film est ajoute ou supprime depuis le menu, donnees.csv est reecrit.
 
-Remarques pour l'oral
+Remarques
 ---------------------
 
 - Les films, acteurs et realisateurs sont organises avec des structures.
